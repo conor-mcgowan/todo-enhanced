@@ -1,17 +1,11 @@
 import React, { useState } from "react";
 import Todo from "./Todo";
-import FilteredTodos from "./FilteredTodos";
 
-const TodoList = (props) => {
-  console.log(props.todos);
+const TodoList = ({ todos, deleteTodo }) => {
   const [filtering, setFiltering] = useState("");
-  const [filterResults, setFilterResults] = useState("");
-  // const [sort, setSort] = useState("username");
-  //   const [order, setOrder] = useState("az")
-  console.log(JSON.stringify(props.todos));
-  console.log(
-    JSON.stringify(props.todos).toLowerCase().includes(filtering.toLowerCase())
-  );
+  const [sortKey, setSortKey] = useState("username");
+  const [sortOrder, setSortOrder] = useState(1);
+
   return (
     <>
       <label>Filter</label>
@@ -20,34 +14,60 @@ const TodoList = (props) => {
         value={filtering}
         onChange={(e) => setFiltering(e.target.value)}
       />
-
-      <button
-        onClick={(e) =>
-          console.log(props.todos.includes(JSON.stringify(filtering)))
-        }
+      <br />
+      <label htmlFor="sort"> Sort by</label>
+      <select
+        id="sort"
+        value={sortKey}
+        onChange={(e) => setSortKey(e.target.value)}
       >
-        Sort
-      </button>
-      <button onClick={() => console.log(JSON.stringify(filtering))}>
-        filter results
-      </button>
-      {/* <label htmlFor="alphabetic"> Alphabetical</label>
-      <input type="radio" id="alphabetic" name="sortType" />
-      <label htmlFor="reverseAlphabetic"> Reverse Alphabetical</label>
-      <input type="radio" id="reverseAlphabetic" name="sortType" ons /> */}
-      {/* <ul>{props.todos.}</ul> */}
-      <ul>
-        {props.todos.map((todos, index) => {
-          return (
-            <FilteredTodos tods={todos} key={index} filtering={filtering} />
-          );
-        })}
-      </ul>
-      {/* <ul>
-        {props.todos.map((t, index) => {
-          return <Todo todos={t} key={index} />;
-        })}
-      </ul> */}
+        <option value="username">Username</option>
+        <option value="task">Task</option>
+      </select>
+      <label htmlFor="order">Order by</label>
+      <select
+        id="order"
+        value={sortOrder}
+        onChange={(e) => setSortOrder(e.target.value)}
+      >
+        <option value="1">A-Z</option>
+        <option value="-1">Z-A</option>
+      </select>
+      <table>
+        <tbody>
+          <tr>
+            <th>ID</th>
+            <th>Completed</th>
+            <th>Name</th>
+            <th>Task</th>
+          </tr>
+          {todos
+            .filter((val) => {
+              let filterLC = filtering.toLowerCase();
+              let usernameLC = val.username.toLowerCase();
+              let taskLC = val.task.toLowerCase();
+              if (usernameLC.includes(filterLC) || taskLC.includes(filterLC)) {
+                return true;
+              }
+              return false;
+            })
+            .sort((a, b) => {
+              if (sortKey === "id") {
+                return (a.id - b.id) * sortOrder;
+              }
+              if (a[sortKey].toLowerCase() < b[sortKey].toLowerCase()) {
+                return -1 * sortOrder;
+              }
+              if (a[sortKey].toLowerCase() > b[sortKey].toLowerCase()) {
+                return 1 * sortOrder;
+              }
+              return 0;
+            })
+            .map((t) => {
+              return <Todo deleteTodo={deleteTodo} todo={t} key={t.id} />;
+            })}
+        </tbody>
+      </table>
     </>
   );
 };

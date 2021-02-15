@@ -1,17 +1,25 @@
 import React, { useState } from "react";
-import Todo from "./Todo";
 import TodoList from "./TodoList";
 
 const TodoApp = () => {
   const [username, setUsername] = useState("");
   const [task, setTask] = useState("");
+  const [id, setId] = useState(9);
   const [todos, setTodos] = useState([
-    {
-      username: "Conor",
-      task: "finish code",
-    },
-    { username: "Kevin", task: "catch z's" },
+    { id: 1, completed: true, username: "Conor", task: "finish code" },
+    { id: 2, completed: false, username: "Kevin", task: "catch z's" },
+    { id: 3, completed: true, username: "Hortense", task: "Study Spanish" },
+    { id: 4, completed: true, username: "Wesley", task: "Storm the Castle" },
+    { id: 5, completed: false, username: "Xavier", task: "Eat dinner" },
+    { id: 6, completed: false, username: "Reginald", task: "Take a walk" },
+    { id: 7, completed: false, username: "Abigail", task: "Go to work" },
+    { id: 8, completed: false, username: "Mary", task: "Dance" },
   ]);
+
+  function deleteTodo(toDelete) {
+    let newArr = todos.filter((val) => val.id !== toDelete);
+    setTodos(newArr);
+  }
 
   return (
     <>
@@ -32,16 +40,18 @@ const TodoApp = () => {
       <button
         onClick={() => {
           let newTodo = {
+            id,
+            completed: false,
             username,
             task,
           };
-          console.log(newTodo);
           setTodos([...todos, newTodo]);
+          setId(id + 1);
         }}
       >
         Add Todo
       </button>
-      <TodoList todos={todos} />
+      <TodoList deleteTodo={deleteTodo} todos={todos} />
     </>
   );
 };

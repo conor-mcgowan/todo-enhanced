@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 
-const Todo = (props) => {
+const Todo = ({ todo, deleteTodo }) => {
+  console.log(todo.id);
+  // let color = todo.completed ? "yellow-green" : "tomato";
   return (
-    <li>
-      {props.todos.username}: {props.todos.task}
-    </li>
+    <tr>
+      <td>{todo.id}</td>
+      <td>{todo.username}</td>
+      <td>{todo.task}</td>
+      <td>{todo.completed.toString()}</td>
+      <td>
+        <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+      </td>
+    </tr>
   );
 };
 
