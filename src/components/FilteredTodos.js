@@ -1,12 +1,19 @@
 import React, { useState } from "react";
 
 const FilteredTodos = (props) => {
+  console.log(props.tods);
   return (
     <>
-      <li>{props.filtering}</li>
-      <li>
+      {/* {props.tods.forEach(
+        (element) =>
+          JSON.stringify(element).includes(props.filtering) && (
+            <li>{element}</li>
+          )
+      )}
+      <li>{props.todos.includes(props.filtering) && console.log("done")}</li> */}
+      {/* <li>
         {props.todos.username}: {props.todos.task}
-      </li>
+      </li> */}
     </>
   );
 };
