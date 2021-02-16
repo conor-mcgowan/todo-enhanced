@@ -47,6 +47,8 @@ const TodoApp = () => {
           };
           setTodos([...todos, newTodo]);
           setId(id + 1);
+          setUsername("");
+          setTask("");
         }}
       >
         Add Todo

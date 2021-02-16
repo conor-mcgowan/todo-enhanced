@@ -2,9 +2,9 @@ import React from "react";
 
 const Todo = ({ todo, deleteTodo }) => {
   console.log(todo.id);
-  // let color = todo.completed ? "yellow-green" : "tomato";
+  let color = todo.completed ? "yellowgreen" : "tomato";
   return (
-    <tr>
+    <tr style={{ backgroundColor: color }}>
       <td>{todo.id}</td>
       <td>{todo.username}</td>
       <td>{todo.task}</td>

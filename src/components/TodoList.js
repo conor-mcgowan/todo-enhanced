@@ -37,9 +37,9 @@ const TodoList = ({ todos, deleteTodo }) => {
         <tbody>
           <tr>
             <th>ID</th>
-            <th>Completed</th>
             <th>Name</th>
             <th>Task</th>
+            <th>Completed</th>
           </tr>
           {todos
             .filter((val) => {
