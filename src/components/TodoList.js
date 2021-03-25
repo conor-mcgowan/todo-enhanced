@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Todo from "./Todo";
+import { TodoContext } from "../contexts/TodoContexts";
 
-const TodoList = ({ todos, deleteTodo }) => {
+const TodoList = () => {
   const [filtering, setFiltering] = useState("");
-  const [sortKey, setSortKey] = useState("username");
+  const [sortKey, setSortKey] = useState("id");
   const [sortOrder, setSortOrder] = useState(1);
+  const todos = useContext(TodoContext);
 
   return (
     <>
-      <label>Filter</label>
+      <label> Filter</label>
       <input
         type="text"
         value={filtering}
@@ -23,6 +25,7 @@ const TodoList = ({ todos, deleteTodo }) => {
       >
         <option value="username">Username</option>
         <option value="task">Task</option>
+        <option value="id">ID</option>
       </select>
       <label htmlFor="order">Order by</label>
       <select
@@ -33,6 +36,7 @@ const TodoList = ({ todos, deleteTodo }) => {
         <option value="1">A-Z</option>
         <option value="-1">Z-A</option>
       </select>
+      <button onClick={() => todos.clear()}>Clear All Todos</button>
       <table>
         <tbody>
           <tr>
@@ -41,12 +45,17 @@ const TodoList = ({ todos, deleteTodo }) => {
             <th>Task</th>
             <th>Completed</th>
           </tr>
-          {todos
+          {todos.value
             .filter((val) => {
               let filterLC = filtering.toLowerCase();
               let usernameLC = val.username.toLowerCase();
               let taskLC = val.task.toLowerCase();
-              if (usernameLC.includes(filterLC) || taskLC.includes(filterLC)) {
+              let id = val.id.toString();
+              if (
+                usernameLC.includes(filterLC) ||
+                taskLC.includes(filterLC) ||
+                id.includes(filterLC)
+              ) {
                 return true;
               }
               return false;
@@ -64,7 +73,14 @@ const TodoList = ({ todos, deleteTodo }) => {
               return 0;
             })
             .map((t) => {
-              return <Todo deleteTodo={deleteTodo} todo={t} key={t.id} />;
+              return (
+                <Todo
+                  deleteTodo={todos.delete}
+                  changeComplete={todos.changeComplete}
+                  todo={t}
+                  key={t.id}
+                />
+              );
             })}
         </tbody>
       </table>

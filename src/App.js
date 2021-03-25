@@ -4,10 +4,11 @@ import "./App.css";
 import "./components/TodoApp.css";
 import "./components/TodoList.css";
 import "./components/Todo.css";
+import TodoProvider from "./contexts/TodoContexts";
 
 function App() {
   return (
-    <>
+    <TodoProvider>
       <header>
         <h1>Tada! Todos</h1>
       </header>
@@ -16,7 +17,7 @@ function App() {
           <TodoApp />
         </div>
       </main>
-    </>
+    </TodoProvider>
   );
 }
 

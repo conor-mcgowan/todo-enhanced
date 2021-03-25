@@ -1,28 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useContext } from "react";
 import TodoList from "./TodoList";
+import { TodoContext } from "../contexts/TodoContexts";
 
-const TodoApp = () => {
+const TodoApp = (props) => {
   const [username, setUsername] = useState("");
   const [task, setTask] = useState("");
   const [id, setId] = useState(9);
-  const [todos, setTodos] = useState([
-    { id: 1, completed: true, username: "Conor", task: "finish code" },
-    { id: 2, completed: false, username: "Kevin", task: "catch z's" },
-    { id: 3, completed: true, username: "Hortense", task: "Study Spanish" },
-    { id: 4, completed: true, username: "Wesley", task: "Storm the Castle" },
-    { id: 5, completed: false, username: "Xavier", task: "Eat dinner" },
-    { id: 6, completed: false, username: "Reginald", task: "Take a walk" },
-    { id: 7, completed: false, username: "Abigail", task: "Go to work" },
-    { id: 8, completed: false, username: "Mary", task: "Dance" },
-  ]);
+  const todos = useContext(TodoContext);
+  // todos.value = the actual array
+  // todos.add = function to add todos
+  // todos.clear = function that resets to []
+  // todos.delete = function that deletes based on id
+  //
+  //
 
-  function deleteTodo(toDelete) {
-    let newArr = todos.filter((val) => val.id !== toDelete);
-    setTodos(newArr);
-  }
+  const incompleteTodos = useMemo(
+    () =>
+      todos.value.filter((val) => {
+        return !val.completed;
+      }),
+    [todos.value]
+  );
 
   return (
     <>
+      <h1>
+        Welcome, there are currently {incompleteTodos.length} unfinished Todos
+      </h1>
       <label htmlFor="username">Name</label>
       <input
         id="username"
@@ -41,11 +45,11 @@ const TodoApp = () => {
         onClick={() => {
           let newTodo = {
             id,
-            completed: false,
             username,
             task,
+            completed: false,
           };
-          setTodos([...todos, newTodo]);
+          todos.add(newTodo);
           setId(id + 1);
           setUsername("");
           setTask("");
@@ -53,7 +57,7 @@ const TodoApp = () => {
       >
         Add Todo
       </button>
-      <TodoList deleteTodo={deleteTodo} todos={todos} />
+      <TodoList />
     </>
   );
 };
